@@ -1,4 +1,4 @@
-
+const User =  require("../models/User") 
 
 exports.login = function (req, res, next) {
 
@@ -7,7 +7,13 @@ exports.logout = function (req, res, next) {
     
 }
 exports.registrar = function (req, res, next) {
-    res.send(JSON.stringify(req.body))
+    let user = new User(req.body)
+    user.registrar()
+    if(user.errors.length){
+        res.send(user.errors.join("<br>"))
+    }else{
+        res.send("Success")
+    }
 }
 exports.home = function (req, res, next) {
     res.render('home-guest')
