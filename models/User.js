@@ -1,18 +1,41 @@
-const validator = require('validator')
+const validator = require('validator').default
 class User {
     constructor(data){
         this.data = data
         this.errors = []
     }
     registrar() {
+        this.limpeza()
         this.validar()
     }
+    limpeza(){
+        if(typeof this.data.username != "string") {
+            this.data.username = ""
+        }
+        if(typeof this.data.email != "string") {
+            this.data.email = ""
+        }
+        if(typeof this.data.password != "string") {
+            this.data.password = ""
+        }
+
+        // Tratando solicitação para ter somente dados do login
+        this.data = {
+            username: this.data.username.trim().toLowerCase(),
+            email : this.data.email.trim().toLowerCase(),
+            password: this.data.password
+        }
+    }
+
     validar (){
         if (this.data.username == ""){
             this.errors.push("Usuario é obrigatorio")
         }
-        if (this.data.email == ""){
-            this.errors.push("Email é obrigatorio")
+        if(this.data.username != "" && !validator.isAlphanumeric(this.data.username)){
+            this.errors.push("Usuario deve conter apenas letras e numeros")
+        }
+        if (!validator.isEmail(this.data.email)){
+            this.errors.push("Email invalido")
         }
         if (this.data.password == ""){
             this.errors.push("Senha é obrigatorio")
