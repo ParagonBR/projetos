@@ -1,4 +1,6 @@
 const validator = require('validator').default
+
+const userCollection = require('../db').collection('usuarios')
 class User {
     constructor(data){
         this.data = data
@@ -7,6 +9,9 @@ class User {
     registrar() {
         this.limpeza()
         this.validar()
+        if (!this.errors.length){
+            userCollection.insertOne(this.data)
+        }
     }
     limpeza(){
         if(typeof this.data.username != "string") {

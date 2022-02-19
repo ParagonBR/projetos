@@ -1,4 +1,6 @@
-const User =  require("../models/User") 
+const User =  require("../models/User")
+
+const userCollection = require('../db').collection('users')
 
 exports.login = function (req, res, next) {
 
