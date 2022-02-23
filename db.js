@@ -1,11 +1,11 @@
 const mongodb = require('mongodb').MongoClient
 const env = require('dotenv')
 env.config()
-mongodb.connect(process.env.URL_BANCO, {
+ mongodb.connect(process.env.URL_BANCO, {
     useNewUrlParser: true,
     useUnifiedTopology: true
-}, (err, client) => {
+},  (err, client) => {
    module.exports = client.db('app')
    const app = require('./app')
-   app.listen(3000)
-})
+   app.listen(process.env.PORT)
+}) 
