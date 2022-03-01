@@ -2,7 +2,7 @@ const bcrypt = require('bcrypt')
 
 const validator = require('validator').default
 
-const userCollection = require('../db').collection('usuarios')
+const userCollection = require('../db').db().collection('usuarios')
 class User {
     constructor(data) {
         this.data = data
@@ -78,11 +78,10 @@ class User {
             let resposta = await userCollection.findOne({
                 username: this.data.username
             })
-            console.log(resposta)
             if (resposta && bcrypt.compareSync(this.data.password, resposta.password)) {
                 return "Deu Certo"
             } else {
-                return "Ocorreu um errro ao logar, favor revisar seus dados"
+                throw "Ocorreu um errro ao logar, favor revisar seus dados"
             }
         } catch (err) {
             return "Deu Errado, erro: " + err
