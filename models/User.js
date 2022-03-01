@@ -1,4 +1,4 @@
-const res = require('express/lib/response')
+const bcrypt = require('bcrypt')
 
 const validator = require('validator').default
 
@@ -13,14 +13,16 @@ class User {
             this.limpeza()
             this.validar()
             if (!this.errors.length) {
-               let resposta = await userCollection.insertOne(this.data)
-               return "Sucesso"
-            }
-            else {
+                // Hash de senha 
+                let salt = bcrypt.genSaltSync(10)
+                this.data.password = bcrypt.hashSync(this.data.password, salt)
+                await userCollection.insertOne(this.data)
+                return "Sucesso"
+            } else {
                 return this.errors.join('<br>')
             }
         } catch (err) {
-           return "Erro: "  + err
+            return "Erro: " + err
         }
 
     }
@@ -59,14 +61,14 @@ class User {
         if (this.data.password.length > 0 && this.data.password.length < 12) {
             this.errors.push("Sua senha deve ter no minimo 12 caracteres")
         }
-        if (this.data.password.length > 100) {
+        if (this.data.password.length > 50) {
             this.errors.push("Sua senha deve ter no maximo 100 caracteres")
         }
         if (this.data.username.length > 0 && this.data.username.length < 3) {
             this.errors.push("Seu Usuario deve ter no minimo 3 caracteres")
         }
-        if (this.data.password.length > 30) {
-            this.errors.push("Seu Usuario deve ter no maximo 100 caracteres")
+        if (this.data.username.length > 30) {
+            this.errors.push("Seu Usuario deve ter no maximo 30 caracteres")
         }
     }
 
@@ -77,7 +79,7 @@ class User {
                 username: this.data.username
             })
             console.log(resposta)
-            if (resposta && resposta.password == this.data.password) {
+            if (resposta && bcrypt.compareSync(this.data.password, resposta.password)) {
                 return "Deu Certo"
             } else {
                 return "Ocorreu um errro ao logar, favor revisar seus dados"
