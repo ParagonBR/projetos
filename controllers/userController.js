@@ -1,38 +1,52 @@
-const User =  require("../models/User")
+const User = require("../models/User")
 
 
 
 exports.login = async function (req, res, next) {
     let user = new User(req.body)
-    try{
+    try {
         let resultado = await user.login()
         req.session.user = {
-            username: user.data.username,    
+            username: user.data.username,
         }
-        console.log(req.session)
-        res.redirect('/')
-    }
-    catch(err){
-        res.send(err)
+        console.log(resultado)
+        req.session.save(() => res.redirect('/'))
+    } catch (err) {
+        req.flash('erros', err)
+        req.session.save(() => {
+            res.redirect('/')
+        })
         console.log(err)
     }
 }
 exports.logout = function (req, res, next) {
-    req.session.user = null
-    res.redirect('/')
+    req.session.destroy(() => {
+        res.redirect('/')
+    })
 
 }
 exports.registrar = async function (req, res, next) {
     let user = new User(req.body)
-    let resultado = await user.registrar()
-    res.send(resultado)
+    try{
+        let resultado = await user.registrar()
+        res.send(resultado)
+    }
+    catch (err){
+        req.flash('regErrors',[].concat(err))
+        req.session.save(() => {
+            res.redirect('/')
+        })
+    }
+
 }
 exports.home = function (req, res, next) {
-    if(req.session.user){
-        res.render('home-logged-in-no-results',{user: req.session.user.username})
-    }
-    else{
-        res.render('home-guest')
+    if (req.session.user) {
+        res.render('home-logged-in-no-results', {
+            user: req.session.user.username
+        })
+    } else {
+        res.render('home-guest',{erros: req.flash('erros')})    
 
     }
+
 }

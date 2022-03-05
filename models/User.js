@@ -19,10 +19,10 @@ class User {
                 await userCollection.insertOne(this.data)
                 return "Sucesso"
             } else {
-                return this.errors.join('<br>')
+                throw this.errors
             }
         } catch (err) {
-            return "Erro: " + err
+            throw  err
         }
 
     }
@@ -79,12 +79,12 @@ class User {
                 username: this.data.username
             })
             if (resposta && bcrypt.compareSync(this.data.password, resposta.password)) {
-                return "Deu Certo"
+                return "Login efetuado com sucesso, Usuario: " + this.data.username
             } else {
-                throw "Ocorreu um errro ao logar, favor revisar seus dados"
+                throw "Usuário e/ou senha inválidos"
             }
         } catch (err) {
-            return "Deu Errado, erro: " + err
+            throw "Problema ao logar: " + err
         }
     }
 }

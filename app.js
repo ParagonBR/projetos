@@ -4,6 +4,7 @@ const app = express()
 const router = require('./router')
 const MongoStore = require('connect-mongo')
 const env = require('dotenv')
+const flash = require('connect-flash')
 env.config()
 let sessionOptions = session({
     secret: "Frase Aleatoria",
@@ -21,6 +22,8 @@ app.use(sessionOptions)
 app.use(express.urlencoded({
     extended: false
 }))
+
+app.use(flash())
 app.use(express.json())
 
 app.set('views', 'views')
