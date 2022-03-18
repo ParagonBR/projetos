@@ -48,6 +48,9 @@
           ipsam, modi consectetur repellat ullam. </p>
       </div>
       <div class="col-lg-5 pl-lg-5 pb-3 py-lg-5">
+        <% regErrors.forEach(param=>{ %>
+          <div class="alert alert-danger text-center"><%= param %></div>
+          <% }) %>
         <form action="/registrar" method="POST" id="registration-form">
 
           <div class="form-group">

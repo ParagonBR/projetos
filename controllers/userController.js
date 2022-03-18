@@ -45,7 +45,7 @@ exports.home = function (req, res, next) {
             user: req.session.user.username
         })
     } else {
-        res.render('home-guest',{erros: req.flash('erros')})    
+        res.render('home-guest',{erros: req.flash('erros'),regErrors: req.flash('regErrors')})    
 
     }
 
