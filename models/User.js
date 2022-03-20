@@ -11,7 +11,7 @@ class User {
     async registrar() {
         try {
             this.limpeza()
-            this.validar()
+            await this.validar()
             if (!this.errors.length) {
                 // Hash de senha 
                 let salt = bcrypt.genSaltSync(10)
@@ -81,7 +81,14 @@ class User {
                 this.errors.push("Usuário já existe")
             }
         }
-
+        if (validator.isEmail(this.data.email)) {
+            let emailExists =  await userCollection.findOne({
+                email: this.data.email
+            })
+            if (emailExists) {
+                this.errors.push("Email já existe")
+            }
+        }
 
     }
 
