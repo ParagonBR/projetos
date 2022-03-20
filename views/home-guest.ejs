@@ -48,11 +48,11 @@
           ipsam, modi consectetur repellat ullam. </p>
       </div>
       <div class="col-lg-5 pl-lg-5 pb-3 py-lg-5">
-        <% regErrors.forEach(param=>{ %>
-          <div class="alert alert-danger text-center"><%= param %></div>
-          <% }) %>
-        <form action="/registrar" method="POST" id="registration-form">
 
+        <form action="/registrar" method="POST" id="registration-form">
+          <% regErrors.forEach(param=>{ %>
+            <div class="alert alert-danger text-center"><%= param %></div>
+            <% }) %>
           <div class="form-group">
             <label for="username-register" class="text-muted mb-1"><small>Usuario</small></label>
             <input name="username" id="username-register" class="form-control" type="text"

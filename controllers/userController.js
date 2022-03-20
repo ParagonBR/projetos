@@ -27,12 +27,11 @@ exports.logout = function (req, res, next) {
 }
 exports.registrar = async function (req, res, next) {
     let user = new User(req.body)
-    try{
+    try {
         let resultado = await user.registrar()
         res.send(resultado)
-    }
-    catch (err){
-        req.flash('regErrors',[].concat(err))
+    } catch (err) {
+        req.flash('regErrors', [].concat(err))
         req.session.save(() => {
             res.redirect('/')
         })
@@ -45,7 +44,10 @@ exports.home = function (req, res, next) {
             user: req.session.user.username
         })
     } else {
-        res.render('home-guest',{erros: req.flash('erros'),regErrors: req.flash('regErrors')})    
+        res.render('home-guest', {
+            erros: req.flash('erros'),
+            regErrors: req.flash('regErrors')
+        })
 
     }
 
