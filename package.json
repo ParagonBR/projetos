@@ -5,7 +5,9 @@
   "main": "db.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "watch": "nodemon db"
+    "watch": "nodemon db",
+    "run" : "db.js"
+
   },
   "author": "Gabriel",
   "license": "ISC",
