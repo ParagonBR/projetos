@@ -29,14 +29,18 @@ exports.registrar = async function (req, res, next) {
     let user = new User(req.body)
     try {
         let resultado = await user.registrar()
-        res.send(resultado)
+        req.session.user = {
+            username : resultado
+        }
+        req.session.save(() => {
+            res.redirect('/')
+        })
     } catch (err) {
         req.flash('regErrors', [].concat(err))
         req.session.save(() => {
             res.redirect('/')
         })
     }
-
 }
 exports.home = function (req, res, next) {
     if (req.session.user) {

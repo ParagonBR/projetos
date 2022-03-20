@@ -17,7 +17,7 @@ class User {
                 let salt = bcrypt.genSaltSync(10)
                 this.data.password = bcrypt.hashSync(this.data.password, salt)
                 await userCollection.insertOne(this.data)
-                return "Sucesso"
+                return this.data.username
             } else {
                 throw this.errors
             }
@@ -47,10 +47,10 @@ class User {
 
     async validar() {
         if (this.data.username == "") {
-            this.errors.push("Usuario é obrigatorio")
+            this.errors.push("Usuário é obrigatorio")
         }
         if (this.data.username != "" && !validator.isAlphanumeric(this.data.username)) {
-            this.errors.push("Usuario deve conter apenas letras e numeros")
+            this.errors.push("Usuário deve conter apenas letras e numeros")
         }
         if (!validator.isEmail(this.data.email)) {
             this.errors.push("Email invalido")
@@ -65,13 +65,13 @@ class User {
             this.errors.push("Sua senha deve ter no maximo 100 caracteres")
         }
         if (this.data.username.length > 0 && this.data.username.length < 3) {
-            this.errors.push("Seu Usuario deve ter no minimo 3 caracteres")
+            this.errors.push("Seu Usuário deve ter no minimo 3 caracteres")
         }
         if (this.data.username.length > 30) {
-            this.errors.push("Seu Usuario deve ter no maximo 30 caracteres")
+            this.errors.push("Seu Usuário deve ter no maximo 30 caracteres")
         }
 
-        // Verificação de usuario e email unico
+        // Verificação de Usuário e email unico
 
         if (this.data.username.length > 2 && this.data.password.length < 31 && validator.isAlphanumeric(this.data.username)) {
             let userExists =  await userCollection.findOne({
@@ -99,7 +99,7 @@ class User {
                 username: this.data.username
             })
             if (resposta && bcrypt.compareSync(this.data.password, resposta.password)) {
-                return "Login efetuado com sucesso, Usuario: " + this.data.username
+                return "Login efetuado com sucesso, Usuário: " + this.data.username
             } else {
                 throw "Usuário e/ou senha inválidos"
             }
