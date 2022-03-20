@@ -47,7 +47,8 @@ exports.registrar = async function (req, res, next) {
 exports.home = function (req, res, next) {
     if (req.session.user) {
         res.render('home-logged-in-no-results', {
-            user: req.session.user.username
+            user: req.session.user.username,
+            avatar:req.session.user.avatar
         })
     } else {
         res.render('home-guest', {
