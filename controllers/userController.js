@@ -8,6 +8,7 @@ exports.login = async function (req, res, next) {
         let resultado = await user.login()
         req.session.user = {
             username: user.data.username,
+            avatar: user.avatar
         }
         console.log(resultado)
         req.session.save(() => res.redirect('/'))
@@ -30,7 +31,8 @@ exports.registrar = async function (req, res, next) {
     try {
         let resultado = await user.registrar()
         req.session.user = {
-            username : resultado
+            username : resultado,
+            avatar: user.avatar
         }
         req.session.save(() => {
             res.redirect('/')

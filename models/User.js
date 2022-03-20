@@ -3,6 +3,9 @@ const bcrypt = require('bcrypt')
 const validator = require('validator').default
 
 const userCollection = require('../db').db().collection('usuarios')
+
+const md5 = require('md5')
+
 class User {
     constructor(data) {
         this.data = data
@@ -17,6 +20,7 @@ class User {
                 let salt = bcrypt.genSaltSync(10)
                 this.data.password = bcrypt.hashSync(this.data.password, salt)
                 await userCollection.insertOne(this.data)
+                this.getAvatar()
                 return this.data.username
             } else {
                 throw this.errors
@@ -99,6 +103,7 @@ class User {
                 username: this.data.username
             })
             if (resposta && bcrypt.compareSync(this.data.password, resposta.password)) {
+                this.getAvatar()
                 return "Login efetuado com sucesso, Usuário: " + this.data.username
             } else {
                 throw "Usuário e/ou senha inválidos"
@@ -106,6 +111,9 @@ class User {
         } catch (err) {
             throw "Problema ao logar: " + err
         }
+    }
+    getAvatar() {
+        this.avatar = `https://gravatar.com/avatar/${md5(this.avatar.email)}?s=128`
     }
 }
 

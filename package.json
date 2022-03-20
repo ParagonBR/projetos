@@ -6,9 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "watch": "nodemon db",
-    "run" : "node db.js",
+    "run": "node db.js",
     "start": "node db.js"
-
   },
   "author": "Gabriel",
   "license": "ISC",
@@ -21,6 +20,7 @@
     "ejs": "^3.1.6",
     "express": "^4.17.3",
     "express-session": "^1.17.2",
+    "md5": "^2.3.0",
     "mongodb": "^4.4.0",
     "nodemon": "^2.0.15",
     "validator": "^13.7.0"
