@@ -22,7 +22,7 @@ class User {
                 throw this.errors
             }
         } catch (err) {
-            throw  err
+            throw err
         }
 
     }
@@ -45,7 +45,7 @@ class User {
         }
     }
 
-    validar() {
+    async validar() {
         if (this.data.username == "") {
             this.errors.push("Usuario é obrigatorio")
         }
@@ -70,6 +70,19 @@ class User {
         if (this.data.username.length > 30) {
             this.errors.push("Seu Usuario deve ter no maximo 30 caracteres")
         }
+
+        // Verificação de usuario e email unico
+
+        if (this.data.username.length > 2 && this.data.password.length < 31 && validator.isAlphanumeric(this.data.username)) {
+            let userExists =  await userCollection.findOne({
+                username: this.data.username
+            })
+            if (userExists) {
+                this.errors.push("Usuário já existe")
+            }
+        }
+
+
     }
 
     async login() {
