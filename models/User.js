@@ -113,7 +113,7 @@ class User {
         }
     }
     getAvatar() {
-        this.avatar = `https://gravatar.com/avatar/${md5(this.avatar.email)}?s=128`
+        this.avatar = `https://gravatar.com/avatar/${md5(this.data.email)}?s=128`
     }
 }
 
