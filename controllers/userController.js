@@ -46,10 +46,7 @@ exports.registrar = async function (req, res, next) {
 }
 exports.home = function (req, res, next) {
     if (req.session.user) {
-        res.render('home-logged-in-no-results', {
-            user: req.session.user.username,
-            avatar:req.session.user.avatar
-        })
+        res.render('home-dashboard')
     } else {
         res.render('home-guest', {
             erros: req.flash('erros'),
@@ -58,4 +55,16 @@ exports.home = function (req, res, next) {
 
     }
 
+}
+
+exports.sessaoAtiva = (req, res, next) => {
+    if(req.session.user) {
+        next()
+    }
+    else{
+        req.flash('erros',"Você deve estar logado para visualizar a página")
+        req.session.save(()=>{
+            res.redirect('/')
+        })
+    }
 }

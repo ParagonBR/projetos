@@ -102,7 +102,9 @@ class User {
             let resposta = await userCollection.findOne({
                 username: this.data.username
             })
+            console.log(resposta)
             if (resposta && bcrypt.compareSync(this.data.password, resposta.password)) {
+                this.data = resposta
                 this.getAvatar()
                 return "Login efetuado com sucesso, Usuário: " + this.data.username
             } else {
