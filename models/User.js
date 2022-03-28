@@ -7,9 +7,12 @@ const userCollection = require('../db').db().collection('usuarios')
 const md5 = require('md5')
 
 class User {
-    constructor(data) {
+    constructor(data, getAvatar = false) {
         this.data = data
         this.errors = []
+        if (getAvatar == true) {
+            this.getAvatar()
+        }
     }
     async registrar() {
         try {
@@ -78,7 +81,7 @@ class User {
         // Verificação de Usuário e email unico
 
         if (this.data.username.length > 2 && this.data.password.length < 31 && validator.isAlphanumeric(this.data.username)) {
-            let userExists =  await userCollection.findOne({
+            let userExists = await userCollection.findOne({
                 username: this.data.username
             })
             if (userExists) {
@@ -86,7 +89,7 @@ class User {
             }
         }
         if (validator.isEmail(this.data.email)) {
-            let emailExists =  await userCollection.findOne({
+            let emailExists = await userCollection.findOne({
                 email: this.data.email
             })
             if (emailExists) {
@@ -102,7 +105,7 @@ class User {
             let resposta = await userCollection.findOne({
                 username: this.data.username
             })
-            console.log(resposta)
+            console.trace(resposta)
             if (resposta && bcrypt.compareSync(this.data.password, resposta.password)) {
                 this.data = resposta
                 this.getAvatar()
@@ -119,4 +122,29 @@ class User {
     }
 }
 
+
+
+User.findByUsername = async (username) => {
+    try {
+        if (typeof username != 'string') {
+            throw "Url informada não é texto puro"
+        }
+        let usuario = await userCollection.findOne({
+            username
+        })
+        if (usuario) {
+            usuario = new User(usuario, true)
+            usuario = {
+                _id: usuario.data._id,
+                username: usuario.data.username,
+                avatar: usuario.avatar
+            }
+            return usuario
+        } else {
+            throw "Usuário não encontrado"
+        }
+    } catch (error) {
+        throw error
+    }
+}
 module.exports = User

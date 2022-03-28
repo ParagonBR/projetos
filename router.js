@@ -16,11 +16,11 @@ router.get('/criar_post',userController.sessaoAtiva,postController.viewCreateScr
 router.post('/criar_post',userController.sessaoAtiva,postController.criarPost)
 
 
+router.get("/post/:id",postController.visualizarPost)
 
-
-
+router.get('/perfil/:username',userController.userExists,userController.profilePostsScreen)
 
 router.get('*', function(req, res){
-    res.status(404).render('404')
+    res.status(404).render('404',{erro:"Página não encontrada"})
 })
 module.exports = router
