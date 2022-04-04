@@ -68,7 +68,7 @@ Post.findByAuthorID = async (id) => {
     }
 
 }
-Post.getUnicoPorID = async (id) => {
+Post.getUnicoPorID = async (id,visitorId) => {
     try {
         if (typeof id != 'string' || !ObjectID.isValid(id)) {
             throw "URL Inválida"
@@ -77,7 +77,7 @@ Post.getUnicoPorID = async (id) => {
             $match: {
                 _id: new ObjectID(id)
             }
-        }])
+        }],visitorId)
         if (posts.length) {
             return posts[0]
         } else {
@@ -91,7 +91,7 @@ Post.getUnicoPorID = async (id) => {
 
 
 
-Post.getDadosBD = async (parametro) => {
+Post.getDadosBD = async (parametro,visitorId) => {
     try {
         let aggOperations = parametro.concat([{
                 $lookup: {
@@ -106,6 +106,7 @@ Post.getDadosBD = async (parametro) => {
                     title: 1,
                     body: 1,
                     dataCriacao: 1,
+                    authorId: "$author",
                     author: {
                         $arrayElemAt: ["$authorDocument", 0]
                     }
@@ -115,6 +116,7 @@ Post.getDadosBD = async (parametro) => {
         ])
         let posts = await postCollection.aggregate(aggOperations).toArray()
         posts = posts.map(post => {
+            post.postOwner = post.authorId.equals(visitorId)
             post.author = {
                 username: post.author.username,
                 avatar: new User(post.author, true).avatar

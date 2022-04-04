@@ -25,7 +25,13 @@ app.use(express.urlencoded({
 
 app.use(flash())
 
+app.use((req, res,next) =>{
+    (req.session.user) ? req.visitorId = req.session.user._id : req.visitorId = 0
 
+
+    // res.locals.user = req.session.user
+    next()
+})
 
 app.use((req, res, next) => {
     res.locals.user = req.session.user
@@ -38,6 +44,6 @@ app.set('view engine', 'ejs')
 
 app.use(express.static(__dirname + '/public'))
 
-app.use('/', router)
+app.use(router)
 
 module.exports = app

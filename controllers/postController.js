@@ -12,7 +12,7 @@ exports.criarPost = async (req, res, next) => {
     try {
         let publicacao = await post.criar()
         console.trace(publicacao)
-        res.redirect('/post/'+publicacao.resposta.insertedId)
+        res.redirect('/post/' + publicacao.resposta.insertedId)
 
     } catch (error) {
         console.error(error)
@@ -21,11 +21,14 @@ exports.criarPost = async (req, res, next) => {
 }
 exports.visualizarPost = async (req, res) => {
     try {
-        let post = await  Post.getUnicoPorID(req.params.id)
-        console.trace(post)
-        res.render('post',{post})
+        let post = await Post.getUnicoPorID(req.params.id,req.visitorId)
+        res.render('post', {
+            post
+        })
     } catch (error) {
         console.trace(error)
-        res.render('404',{erro: error})
+        res.render('404', {
+            erro: error
+        })
     }
 }

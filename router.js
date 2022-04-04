@@ -15,8 +15,11 @@ router.get('/criar_post',userController.sessaoAtiva,postController.viewCreateScr
 
 router.post('/criar_post',userController.sessaoAtiva,postController.criarPost)
 
-
 router.get("/post/:id",postController.visualizarPost)
+
+router.get('/post/:id/editar',(req, res) => {
+    res.send(req.params)
+})
 
 router.get('/perfil/:username',userController.userExists,userController.profilePostsScreen)
 
